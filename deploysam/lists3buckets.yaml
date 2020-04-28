@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'deploysam
+
+  Sample SAM Template for deploysam
+
+  '
+Globals:
+  Function:
+    Timeout: 60
+Resources:
+  ListS3BucketsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ListS3Buckets
+      Description: SAM demo for listing s3 buckets
+      Role:
+        Fn::ImportValue: SAMIamRole
+      CodeUri: s3://samdeploy-nonprod/8bbc6b2a3b4c9b902ee1c7679f74410a
+      Handler: main.lambda_handler
+      Runtime: python3.7
+      Events:
+        ListS3BucketsAPI:
+          Type: Api
+          Properties:
+            Path: /lists3buckets
+            Method: get
+Outputs:
+  ListS3BucketsAPI:
+    Description: API Gateway endpoint URL for Prod stage for ListS3Buckets function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/lists3buckets/
+  ListS3BucketsFunction:
+    Description: ListS3Buckets Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - ListS3BucketsFunction
+      - Arn

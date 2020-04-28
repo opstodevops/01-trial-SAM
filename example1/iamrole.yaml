@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  SAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName:
+        Fn::Sub: SAMRole
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+            - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+              - lambda.amazonaws.com
+        Version: 2012-10-17
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        # - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      Path: /
+
+Outputs:
+  SAMIamRole:
+    Description: "Implicit IAM Role created for SAM functions"
+    Value: !GetAtt SAMRole.Arn
+    Export:
+      Name: SAMIamRole
